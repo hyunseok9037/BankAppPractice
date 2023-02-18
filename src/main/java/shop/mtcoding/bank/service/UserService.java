@@ -17,7 +17,7 @@ public class UserService {
 
     @Transactional
     public void 회원가입(joinReqDto joinReqDto) {
-        int result = userRepository.insert(joinReqDto);
+        int result = userRepository.insert(joinReqDto.toModel());
         if (result != 1) {
             throw new CustomException("회원가입실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }

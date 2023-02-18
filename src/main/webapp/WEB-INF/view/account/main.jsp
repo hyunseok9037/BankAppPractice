@@ -10,12 +10,14 @@
                 <th>잔액</th>
             </tr>
         </thead>
-        <thead>
-            <tr>
-                <th>1111 계좌</th>
-                <th>1000원</th>
-            </tr>
-        </thead>
+       <tbody>
+         <c:forEach items="${accountList}" var="account">
+             <tr>
+            <td><a href="/account/${account.id}">${account.number}</a></td>
+            <td>${account.balance}원</td>
+             </tr>
+            </c:forEach>
+        </tbody>
     </table>
 
 

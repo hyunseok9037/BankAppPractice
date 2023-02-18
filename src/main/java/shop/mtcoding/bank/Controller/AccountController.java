@@ -1,16 +1,21 @@
 package shop.mtcoding.bank.Controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import shop.mtcoding.bank.dto.account.AccountSaveReqDto;
 import shop.mtcoding.bank.handler.ex.CustomException;
+import shop.mtcoding.bank.model.account.Account;
+import shop.mtcoding.bank.model.account.AccountRepository;
 import shop.mtcoding.bank.model.user.User;
 import shop.mtcoding.bank.service.AccountService;
 
@@ -22,6 +27,9 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @PostMapping("/account")
     public String save(AccountSaveReqDto accountSaveReqDto) {
@@ -43,8 +51,15 @@ public class AccountController {
     }
 
     @GetMapping({ "/", "/account" })
-    public String main() {
-        // throw new CustomException("인증되지 않았습니다", HttpStatus.UNAUTHORIZED);
+    public String main(Model model) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return "redirect:/loginForm";
+        }
+
+        List<Account> accountList = accountRepository.findByUserId(principal.getId());
+        model.addAttribute("accountList", accountList);
+
         return "account/main";
     }
 

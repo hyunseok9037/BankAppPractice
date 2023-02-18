@@ -43,7 +43,7 @@ public class UserController {
             throw new CustomException("아이디 혹은 비번이 틀렸습니다", HttpStatus.BAD_REQUEST);
         }
 
-        session.setAttribute("principal", "principal");
+        session.setAttribute("principal", principal);
 
         return "redirect:/";
     }
@@ -77,4 +77,11 @@ public class UserController {
     public String join() {
         return "user/joinForm";
     }
+
+    @GetMapping("/logout")
+    public String logout() {
+        session.invalidate();
+        return "redirect:/";
+    }
+
 }

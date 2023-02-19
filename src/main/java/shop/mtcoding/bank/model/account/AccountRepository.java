@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AccountRepository {
 
+    public Account findByNumber(String number);;
+
     public List<Account> findByUserId(Integer id);
 
     public int insert(Account account);

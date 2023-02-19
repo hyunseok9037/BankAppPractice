@@ -3,9 +3,15 @@ package shop.mtcoding.bank.model.history;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import shop.mtcoding.bank.dto.history.HistoryRespDto;
 
 @Mapper
 public interface HistoryRepository {
+
+    public List<HistoryRespDto> findByGubun(@Param("gubun") String gubun,
+            @Param("accountId") int accountId);
 
     public int insert(History history);
 

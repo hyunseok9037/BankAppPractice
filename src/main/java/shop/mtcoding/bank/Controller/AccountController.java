@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import shop.mtcoding.bank.dto.account.AccountDepositReqDto;
 import shop.mtcoding.bank.dto.account.AccountSaveReqDto;
 import shop.mtcoding.bank.dto.account.AccountWithdrawReqDto;
 import shop.mtcoding.bank.handler.ex.CustomException;
@@ -31,6 +32,23 @@ public class AccountController {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @PostMapping("/account/deposit")
+    public String deposit(AccountDepositReqDto accountDepositReqDto) {
+        if (accountDepositReqDto.getAmount() == null) {
+            throw new CustomException("amount를 입력해주세요", HttpStatus.BAD_REQUEST);
+        }
+        if (accountDepositReqDto.getAmount().longValue() <= 0) {
+            throw new CustomException("입금액이 0원 이하일 수 없습니다", HttpStatus.BAD_REQUEST);
+        }
+        if (accountDepositReqDto.getDAccountNumber() == null || accountDepositReqDto.getDAccountNumber().isEmpty()) {
+            throw new CustomException("계좌번호를 입력해주세요", HttpStatus.BAD_REQUEST);
+        }
+
+        accountService.입금하기(accountDepositReqDto);
+
+        return "redirect:/";
+    }
 
     @PostMapping("/account/withdraw")
     public String withdraw(AccountWithdrawReqDto accountWithdrawReqDto) {
